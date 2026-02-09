@@ -9,12 +9,19 @@ import adminRoutes from './routes/admin.routes.js';
 dotenv.config();
 const app = express();
 
-// Connect to MongoDB
-await connectDB();
-
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Connect to MongoDB
+let isConnected = false;
+app.use(async (req, res, next) => {
+  if (!isConnected) {
+    await connectDB();
+    isConnected = true;
+  }
+  next();
+});
 
 // Routes
 app.use("/api/auth", authRoutes);
