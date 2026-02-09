@@ -10,7 +10,7 @@ dotenv.config();
 const app = express();
 
 // Connect to MongoDB
-connectDB();
+await connectDB();
 
 // Middleware
 app.use(cors());
@@ -20,6 +20,10 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/admin", adminRoutes);
+
+app.get("/", (req, res) => {
+    res.send("Welcome to the ME_MERN_XEXIT API");
+});
 
 app.listen(process.env.PORT, () => {
     console.log(`Server is running on port ${process.env.PORT}`);
