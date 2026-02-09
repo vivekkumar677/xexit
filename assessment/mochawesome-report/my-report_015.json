@@ -1,0 +1,264 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 8,
+    "passes": 2,
+    "pending": 0,
+    "failures": 6,
+    "start": "2026-02-09T00:24:07.840Z",
+    "end": "2026-02-09T00:24:10.856Z",
+    "duration": 3016,
+    "testsRegistered": 8,
+    "passPercent": 25,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "1cb7f25c-5049-4689-bb82-9d72e19d82ee",
+      "title": "",
+      "fullFile": "cypress\\integration\\backend\\backendTests.spec.js",
+      "file": "cypress\\integration\\backend\\backendTests.spec.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "5c8cdf1c-5544-401d-bb1a-f6ce4057774c",
+          "title": "Backend API Tests for Employee and Admin Role",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "should register a new employee",
+              "fullTitle": "Backend API Tests for Employee and Admin Role should register a new employee",
+              "timedOut": null,
+              "duration": 190,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.request(\"POST\", `${apiUrl}/auth/register`, {\n  username: employeeUsername,\n  // Use the dynamically generated username\n  password: employeePassword\n}).then(response => {\n  expect(response.status).to.eq(201);\n  expect(response.body).to.have.property(\"message\", \"User registered successfully\");\n});",
+              "err": {},
+              "uuid": "541502b2-dfa5-47c1-b9c4-4a937e9c32ff",
+              "parentUUID": "5c8cdf1c-5544-401d-bb1a-f6ce4057774c",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "should login the employee with valid credentials",
+              "fullTitle": "Backend API Tests for Employee and Admin Role should login the employee with valid credentials",
+              "timedOut": null,
+              "duration": 55,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.request(\"POST\", `${apiUrl}/auth/login`, {\n  username: employeeUsername,\n  // Use the same username as registration\n  password: employeePassword // Use the same password as registration\n}).then(response => {\n  expect(response.status).to.eq(200);\n  expect(response.body).to.have.property(\"token\");\n  Cypress.env(\"employeeAuthToken\", response.body.token); // Store token in Cypress environment variable\n});",
+              "err": {},
+              "uuid": "6012f745-0dbb-46d0-9c50-edaa97ac8874",
+              "parentUUID": "5c8cdf1c-5544-401d-bb1a-f6ce4057774c",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "should submit resignation for an employee",
+              "fullTitle": "Backend API Tests for Employee and Admin Role should submit resignation for an employee",
+              "timedOut": null,
+              "duration": 422,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "const token = Cypress.env(\"employeeAuthToken\"); // Retrieve token from Cypress environment variable\ncy.request({\n  method: \"POST\",\n  url: `${apiUrl}/user/resign`,\n  headers: {\n    Authorization: `${token}`\n  },\n  body: {\n    lwd: \"2025-12-26\"\n  }\n}).then(response => {\n  expect(response.status).to.eq(200);\n  employeeResignationId = response.body.data.resignation._id; // Store resignation ID for approval\n});",
+              "err": {
+                "message": "CypressError: `cy.request()` failed on:\n\nhttp://localhost:3001/api/user/resign\n\nThe response we received from your web server was:\n\n  > 500: Internal Server Error\n\nThis was considered a failure because the status code was not `2xx` or `3xx`.\n\nIf you do not want status codes to cause failures pass the option: `failOnStatusCode: false`\n\n-----------------------------------------------------------\n\nThe request we sent was:\n\nMethod: POST\nURL: http://localhost:3001/api/user/resign\nHeaders: {\n  \"Connection\": \"keep-alive\",\n  \"Authorization\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTg5MjkyN2FlMDM5MTU5ZTYzMzEyZGIiLCJyb2xlIjoiRU1QTE9ZRUUiLCJpYXQiOjE3NzA1OTY2NDgsImV4cCI6MTc3MDY4MzA0OH0.WzHq9LvVu4q8B1QPq_ObUFfSVdfFh-wzjF9eqBBxj-g\",\n  \"user-agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Cypress/13.17.0 Chrome/118.0.5993.159 Electron/27.3.10 Safari/537.36\",\n  \"accept\": \"*/*\",\n  \"accept-encoding\": \"gzip, deflate\",\n  \"content-type\": \"application/json\",\n  \"content-length\": 20\n}\nBody: {\"lwd\":\"2025-12-26\"}\n\n-----------------------------------------------------------\n\nThe response we got was:\n\nStatus: 500 - Internal Server Error\nHeaders: {\n  \"x-powered-by\": \"Express\",\n  \"access-control-allow-origin\": \"*\",\n  \"content-type\": \"application/json; charset=utf-8\",\n  \"content-length\": \"26\",\n  \"etag\": \"W/\\\"1a-thWblZUh/FVbuTKlOhoijVCYTu0\\\"\",\n  \"date\": \"Mon, 09 Feb 2026 00:24:08 GMT\",\n  \"connection\": \"keep-alive\",\n  \"keep-alive\": \"timeout=5\"\n}\nBody: {\n  \"message\": \"Server error\"\n}\n\n\nhttps://on.cypress.io/request",
+                "estack": "CypressError: `cy.request()` failed on:\n\nhttp://localhost:3001/api/user/resign\n\nThe response we received from your web server was:\n\n  > 500: Internal Server Error\n\nThis was considered a failure because the status code was not `2xx` or `3xx`.\n\nIf you do not want status codes to cause failures pass the option: `failOnStatusCode: false`\n\n-----------------------------------------------------------\n\nThe request we sent was:\n\nMethod: POST\nURL: http://localhost:3001/api/user/resign\nHeaders: {\n  \"Connection\": \"keep-alive\",\n  \"Authorization\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTg5MjkyN2FlMDM5MTU5ZTYzMzEyZGIiLCJyb2xlIjoiRU1QTE9ZRUUiLCJpYXQiOjE3NzA1OTY2NDgsImV4cCI6MTc3MDY4MzA0OH0.WzHq9LvVu4q8B1QPq_ObUFfSVdfFh-wzjF9eqBBxj-g\",\n  \"user-agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Cypress/13.17.0 Chrome/118.0.5993.159 Electron/27.3.10 Safari/537.36\",\n  \"accept\": \"*/*\",\n  \"accept-encoding\": \"gzip, deflate\",\n  \"content-type\": \"application/json\",\n  \"content-length\": 20\n}\nBody: {\"lwd\":\"2025-12-26\"}\n\n-----------------------------------------------------------\n\nThe response we got was:\n\nStatus: 500 - Internal Server Error\nHeaders: {\n  \"x-powered-by\": \"Express\",\n  \"access-control-allow-origin\": \"*\",\n  \"content-type\": \"application/json; charset=utf-8\",\n  \"content-length\": \"26\",\n  \"etag\": \"W/\\\"1a-thWblZUh/FVbuTKlOhoijVCYTu0\\\"\",\n  \"date\": \"Mon, 09 Feb 2026 00:24:08 GMT\",\n  \"connection\": \"keep-alive\",\n  \"keep-alive\": \"timeout=5\"\n}\nBody: {\n  \"message\": \"Server error\"\n}\n\n\nhttps://on.cypress.io/request\n    at <unknown> (http://localhost:3001/__cypress/runner/cypress_runner.js:132876:72)\n    at tryCatcher (http://localhost:3001/__cypress/runner/cypress_runner.js:1830:23)\n    at Promise._settlePromiseFromHandler (http://localhost:3001/__cypress/runner/cypress_runner.js:1542:31)\n    at Promise._settlePromise (http://localhost:3001/__cypress/runner/cypress_runner.js:1599:18)\n    at Promise._settlePromise0 (http://localhost:3001/__cypress/runner/cypress_runner.js:1644:10)\n    at Promise._settlePromises (http://localhost:3001/__cypress/runner/cypress_runner.js:1724:18)\n    at _drainQueueStep (http://localhost:3001/__cypress/runner/cypress_runner.js:2430:12)\n    at _drainQueue (http://localhost:3001/__cypress/runner/cypress_runner.js:2423:9)\n    at Async._drainQueues (http://localhost:3001/__cypress/runner/cypress_runner.js:2439:5)\n    at Async.drainQueues (http://localhost:3001/__cypress/runner/cypress_runner.js:2309:14)\nFrom Your Spec Code:\n    at Context.eval (webpack://exitease/./cypress/integration/backend/backendTests.spec.js:34:7)",
+                "diff": null
+              },
+              "uuid": "19728da1-e20b-46eb-a169-b18eba0eadb3",
+              "parentUUID": "5c8cdf1c-5544-401d-bb1a-f6ce4057774c",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "should login as admin (HR)",
+              "fullTitle": "Backend API Tests for Employee and Admin Role should login as admin (HR)",
+              "timedOut": null,
+              "duration": 460,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "cy.request(\"POST\", `${apiUrl}/auth/login`, {\n  username: \"admin\",\n  password: \"admin\"\n}).then(response => {\n  expect(response.status).to.eq(200);\n  expect(response.body).to.have.property(\"token\");\n  Cypress.env(\"adminAuthToken\", response.body.token); // Store admin token in Cypress environment variable\n});",
+              "err": {
+                "message": "CypressError: `cy.request()` failed on:\n\nhttp://localhost:3001/api/auth/login\n\nThe response we received from your web server was:\n\n  > 401: Unauthorized\n\nThis was considered a failure because the status code was not `2xx` or `3xx`.\n\nIf you do not want status codes to cause failures pass the option: `failOnStatusCode: false`\n\n-----------------------------------------------------------\n\nThe request we sent was:\n\nMethod: POST\nURL: http://localhost:3001/api/auth/login\nHeaders: {\n  \"Connection\": \"keep-alive\",\n  \"user-agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Cypress/13.17.0 Chrome/118.0.5993.159 Electron/27.3.10 Safari/537.36\",\n  \"accept\": \"*/*\",\n  \"accept-encoding\": \"gzip, deflate\",\n  \"content-type\": \"application/json\",\n  \"content-length\": 39\n}\nBody: {\"username\":\"admin\",\"password\":\"admin\"}\n\n-----------------------------------------------------------\n\nThe response we got was:\n\nStatus: 401 - Unauthorized\nHeaders: {\n  \"x-powered-by\": \"Express\",\n  \"access-control-allow-origin\": \"*\",\n  \"content-type\": \"application/json; charset=utf-8\",\n  \"content-length\": \"33\",\n  \"etag\": \"W/\\\"21-dBEoW0UmTF+EGUMaprEp9/8zNNA\\\"\",\n  \"date\": \"Mon, 09 Feb 2026 00:24:08 GMT\",\n  \"connection\": \"keep-alive\",\n  \"keep-alive\": \"timeout=5\"\n}\nBody: {\n  \"message\": \"Invalid credentials\"\n}\n\n\nhttps://on.cypress.io/request",
+                "estack": "CypressError: `cy.request()` failed on:\n\nhttp://localhost:3001/api/auth/login\n\nThe response we received from your web server was:\n\n  > 401: Unauthorized\n\nThis was considered a failure because the status code was not `2xx` or `3xx`.\n\nIf you do not want status codes to cause failures pass the option: `failOnStatusCode: false`\n\n-----------------------------------------------------------\n\nThe request we sent was:\n\nMethod: POST\nURL: http://localhost:3001/api/auth/login\nHeaders: {\n  \"Connection\": \"keep-alive\",\n  \"user-agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Cypress/13.17.0 Chrome/118.0.5993.159 Electron/27.3.10 Safari/537.36\",\n  \"accept\": \"*/*\",\n  \"accept-encoding\": \"gzip, deflate\",\n  \"content-type\": \"application/json\",\n  \"content-length\": 39\n}\nBody: {\"username\":\"admin\",\"password\":\"admin\"}\n\n-----------------------------------------------------------\n\nThe response we got was:\n\nStatus: 401 - Unauthorized\nHeaders: {\n  \"x-powered-by\": \"Express\",\n  \"access-control-allow-origin\": \"*\",\n  \"content-type\": \"application/json; charset=utf-8\",\n  \"content-length\": \"33\",\n  \"etag\": \"W/\\\"21-dBEoW0UmTF+EGUMaprEp9/8zNNA\\\"\",\n  \"date\": \"Mon, 09 Feb 2026 00:24:08 GMT\",\n  \"connection\": \"keep-alive\",\n  \"keep-alive\": \"timeout=5\"\n}\nBody: {\n  \"message\": \"Invalid credentials\"\n}\n\n\nhttps://on.cypress.io/request\n    at <unknown> (http://localhost:3001/__cypress/runner/cypress_runner.js:132876:72)\n    at tryCatcher (http://localhost:3001/__cypress/runner/cypress_runner.js:1830:23)\n    at Promise._settlePromiseFromHandler (http://localhost:3001/__cypress/runner/cypress_runner.js:1542:31)\n    at Promise._settlePromise (http://localhost:3001/__cypress/runner/cypress_runner.js:1599:18)\n    at Promise._settlePromise0 (http://localhost:3001/__cypress/runner/cypress_runner.js:1644:10)\n    at Promise._settlePromises (http://localhost:3001/__cypress/runner/cypress_runner.js:1724:18)\n    at _drainQueueStep (http://localhost:3001/__cypress/runner/cypress_runner.js:2430:12)\n    at _drainQueue (http://localhost:3001/__cypress/runner/cypress_runner.js:2423:9)\n    at Async._drainQueues (http://localhost:3001/__cypress/runner/cypress_runner.js:2439:5)\n    at Async.drainQueues (http://localhost:3001/__cypress/runner/cypress_runner.js:2309:14)\nFrom Your Spec Code:\n    at Context.eval (webpack://exitease/./cypress/integration/backend/backendTests.spec.js:51:7)",
+                "diff": null
+              },
+              "uuid": "54e101ee-ba4d-4c98-bfb0-3e3f4ebea084",
+              "parentUUID": "5c8cdf1c-5544-401d-bb1a-f6ce4057774c",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "should view all resignations submitted by employees as admin",
+              "fullTitle": "Backend API Tests for Employee and Admin Role should view all resignations submitted by employees as admin",
+              "timedOut": null,
+              "duration": 347,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "const token = Cypress.env(\"adminAuthToken\"); // Retrieve admin token from Cypress environment variable\ncy.request({\n  method: \"GET\",\n  url: `${apiUrl}/admin/resignations`,\n  headers: {\n    Authorization: `${token}`\n  }\n}).then(response => {\n  expect(response.status).to.eq(200);\n  expect(response.body.data).to.be.an(\"array\");\n});",
+              "err": {
+                "message": "CypressError: `cy.request()` failed on:\n\nhttp://localhost:3001/api/admin/resignations\n\nThe response we received from your web server was:\n\n  > 401: Unauthorized\n\nThis was considered a failure because the status code was not `2xx` or `3xx`.\n\nIf you do not want status codes to cause failures pass the option: `failOnStatusCode: false`\n\n-----------------------------------------------------------\n\nThe request we sent was:\n\nMethod: GET\nURL: http://localhost:3001/api/admin/resignations\nHeaders: {\n  \"Connection\": \"keep-alive\",\n  \"Authorization\": \"undefined\",\n  \"user-agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Cypress/13.17.0 Chrome/118.0.5993.159 Electron/27.3.10 Safari/537.36\",\n  \"accept\": \"*/*\",\n  \"accept-encoding\": \"gzip, deflate\"\n}\n\n-----------------------------------------------------------\n\nThe response we got was:\n\nStatus: 401 - Unauthorized\nHeaders: {\n  \"x-powered-by\": \"Express\",\n  \"access-control-allow-origin\": \"*\",\n  \"content-type\": \"application/json; charset=utf-8\",\n  \"content-length\": \"27\",\n  \"etag\": \"W/\\\"1b-w4O8U+0Ll+sSArmfAX18RvhWpiQ\\\"\",\n  \"date\": \"Mon, 09 Feb 2026 00:24:09 GMT\",\n  \"connection\": \"keep-alive\",\n  \"keep-alive\": \"timeout=5\"\n}\nBody: {\n  \"message\": \"Invalid token\"\n}\n\n\nhttps://on.cypress.io/request",
+                "estack": "CypressError: `cy.request()` failed on:\n\nhttp://localhost:3001/api/admin/resignations\n\nThe response we received from your web server was:\n\n  > 401: Unauthorized\n\nThis was considered a failure because the status code was not `2xx` or `3xx`.\n\nIf you do not want status codes to cause failures pass the option: `failOnStatusCode: false`\n\n-----------------------------------------------------------\n\nThe request we sent was:\n\nMethod: GET\nURL: http://localhost:3001/api/admin/resignations\nHeaders: {\n  \"Connection\": \"keep-alive\",\n  \"Authorization\": \"undefined\",\n  \"user-agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Cypress/13.17.0 Chrome/118.0.5993.159 Electron/27.3.10 Safari/537.36\",\n  \"accept\": \"*/*\",\n  \"accept-encoding\": \"gzip, deflate\"\n}\n\n-----------------------------------------------------------\n\nThe response we got was:\n\nStatus: 401 - Unauthorized\nHeaders: {\n  \"x-powered-by\": \"Express\",\n  \"access-control-allow-origin\": \"*\",\n  \"content-type\": \"application/json; charset=utf-8\",\n  \"content-length\": \"27\",\n  \"etag\": \"W/\\\"1b-w4O8U+0Ll+sSArmfAX18RvhWpiQ\\\"\",\n  \"date\": \"Mon, 09 Feb 2026 00:24:09 GMT\",\n  \"connection\": \"keep-alive\",\n  \"keep-alive\": \"timeout=5\"\n}\nBody: {\n  \"message\": \"Invalid token\"\n}\n\n\nhttps://on.cypress.io/request\n    at <unknown> (http://localhost:3001/__cypress/runner/cypress_runner.js:132876:72)\n    at tryCatcher (http://localhost:3001/__cypress/runner/cypress_runner.js:1830:23)\n    at Promise._settlePromiseFromHandler (http://localhost:3001/__cypress/runner/cypress_runner.js:1542:31)\n    at Promise._settlePromise (http://localhost:3001/__cypress/runner/cypress_runner.js:1599:18)\n    at Promise._settlePromise0 (http://localhost:3001/__cypress/runner/cypress_runner.js:1644:10)\n    at Promise._settlePromises (http://localhost:3001/__cypress/runner/cypress_runner.js:1724:18)\n    at _drainQueueStep (http://localhost:3001/__cypress/runner/cypress_runner.js:2430:12)\n    at _drainQueue (http://localhost:3001/__cypress/runner/cypress_runner.js:2423:9)\n    at Async._drainQueues (http://localhost:3001/__cypress/runner/cypress_runner.js:2439:5)\n    at Async.drainQueues (http://localhost:3001/__cypress/runner/cypress_runner.js:2309:14)\nFrom Your Spec Code:\n    at Context.eval (webpack://exitease/./cypress/integration/backend/backendTests.spec.js:63:7)",
+                "diff": null
+              },
+              "uuid": "5beb7b81-d597-4251-81de-0e44c098a0d0",
+              "parentUUID": "5c8cdf1c-5544-401d-bb1a-f6ce4057774c",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "should approve the employee’s resignation as admin",
+              "fullTitle": "Backend API Tests for Employee and Admin Role should approve the employee’s resignation as admin",
+              "timedOut": null,
+              "duration": 366,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "const token = Cypress.env(\"adminAuthToken\"); // Retrieve admin token from Cypress environment variable\ncy.request({\n  method: \"PUT\",\n  url: `${apiUrl}/admin/conclude_resignation`,\n  headers: {\n    Authorization: `${token}`\n  },\n  body: {\n    resignationId: employeeResignationId,\n    approved: true,\n    lwd: \"26 Dec 2025\"\n  }\n}).then(response => {\n  expect(response.status).to.eq(200);\n});",
+              "err": {
+                "message": "CypressError: `cy.request()` failed on:\n\nhttp://localhost:3001/api/admin/conclude_resignation\n\nThe response we received from your web server was:\n\n  > 401: Unauthorized\n\nThis was considered a failure because the status code was not `2xx` or `3xx`.\n\nIf you do not want status codes to cause failures pass the option: `failOnStatusCode: false`\n\n-----------------------------------------------------------\n\nThe request we sent was:\n\nMethod: PUT\nURL: http://localhost:3001/api/admin/conclude_resignation\nHeaders: {\n  \"Connection\": \"keep-alive\",\n  \"Authorization\": \"undefined\",\n  \"user-agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Cypress/13.17.0 Chrome/118.0.5993.159 Electron/27.3.10 Safari/537.36\",\n  \"accept\": \"*/*\",\n  \"accept-encoding\": \"gzip, deflate\",\n  \"content-type\": \"application/json\",\n  \"content-length\": 58\n}\nBody: {\"resignationId\":null,\"approved\":true,\"lwd\":\"26 Dec 2025\"}\n\n-----------------------------------------------------------\n\nThe response we got was:\n\nStatus: 401 - Unauthorized\nHeaders: {\n  \"x-powered-by\": \"Express\",\n  \"access-control-allow-origin\": \"*\",\n  \"content-type\": \"application/json; charset=utf-8\",\n  \"content-length\": \"27\",\n  \"etag\": \"W/\\\"1b-w4O8U+0Ll+sSArmfAX18RvhWpiQ\\\"\",\n  \"date\": \"Mon, 09 Feb 2026 00:24:09 GMT\",\n  \"connection\": \"keep-alive\",\n  \"keep-alive\": \"timeout=5\"\n}\nBody: {\n  \"message\": \"Invalid token\"\n}\n\n\nhttps://on.cypress.io/request",
+                "estack": "CypressError: `cy.request()` failed on:\n\nhttp://localhost:3001/api/admin/conclude_resignation\n\nThe response we received from your web server was:\n\n  > 401: Unauthorized\n\nThis was considered a failure because the status code was not `2xx` or `3xx`.\n\nIf you do not want status codes to cause failures pass the option: `failOnStatusCode: false`\n\n-----------------------------------------------------------\n\nThe request we sent was:\n\nMethod: PUT\nURL: http://localhost:3001/api/admin/conclude_resignation\nHeaders: {\n  \"Connection\": \"keep-alive\",\n  \"Authorization\": \"undefined\",\n  \"user-agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Cypress/13.17.0 Chrome/118.0.5993.159 Electron/27.3.10 Safari/537.36\",\n  \"accept\": \"*/*\",\n  \"accept-encoding\": \"gzip, deflate\",\n  \"content-type\": \"application/json\",\n  \"content-length\": 58\n}\nBody: {\"resignationId\":null,\"approved\":true,\"lwd\":\"26 Dec 2025\"}\n\n-----------------------------------------------------------\n\nThe response we got was:\n\nStatus: 401 - Unauthorized\nHeaders: {\n  \"x-powered-by\": \"Express\",\n  \"access-control-allow-origin\": \"*\",\n  \"content-type\": \"application/json; charset=utf-8\",\n  \"content-length\": \"27\",\n  \"etag\": \"W/\\\"1b-w4O8U+0Ll+sSArmfAX18RvhWpiQ\\\"\",\n  \"date\": \"Mon, 09 Feb 2026 00:24:09 GMT\",\n  \"connection\": \"keep-alive\",\n  \"keep-alive\": \"timeout=5\"\n}\nBody: {\n  \"message\": \"Invalid token\"\n}\n\n\nhttps://on.cypress.io/request\n    at <unknown> (http://localhost:3001/__cypress/runner/cypress_runner.js:132876:72)\n    at tryCatcher (http://localhost:3001/__cypress/runner/cypress_runner.js:1830:23)\n    at Promise._settlePromiseFromHandler (http://localhost:3001/__cypress/runner/cypress_runner.js:1542:31)\n    at Promise._settlePromise (http://localhost:3001/__cypress/runner/cypress_runner.js:1599:18)\n    at Promise._settlePromise0 (http://localhost:3001/__cypress/runner/cypress_runner.js:1644:10)\n    at Promise._settlePromises (http://localhost:3001/__cypress/runner/cypress_runner.js:1724:18)\n    at _drainQueueStep (http://localhost:3001/__cypress/runner/cypress_runner.js:2430:12)\n    at _drainQueue (http://localhost:3001/__cypress/runner/cypress_runner.js:2423:9)\n    at Async._drainQueues (http://localhost:3001/__cypress/runner/cypress_runner.js:2439:5)\n    at Async.drainQueues (http://localhost:3001/__cypress/runner/cypress_runner.js:2309:14)\nFrom Your Spec Code:\n    at Context.eval (webpack://exitease/./cypress/integration/backend/backendTests.spec.js:77:7)",
+                "diff": null
+              },
+              "uuid": "b41e4686-f592-45b0-8e51-b4afd55b1ba0",
+              "parentUUID": "5c8cdf1c-5544-401d-bb1a-f6ce4057774c",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "should allow the employee to submit responses to exit questionnaire",
+              "fullTitle": "Backend API Tests for Employee and Admin Role should allow the employee to submit responses to exit questionnaire",
+              "timedOut": null,
+              "duration": 270,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "const token = Cypress.env(\"employeeAuthToken\"); // Retrieve employee token from Cypress environment variable\ncy.request({\n  method: \"POST\",\n  url: `${apiUrl}/user/responses`,\n  headers: {\n    Authorization: `${token}`\n  },\n  body: {\n    responses: [{\n      questionText: \"What prompted you to start looking for another job?\",\n      response: \"Lack of career growth opportunities\"\n    }, {\n      questionText: \"Would you recommend this company to others?\",\n      response: \"Yes, with some reservations\"\n    }]\n  }\n}).then(response => {\n  expect(response.status).to.eq(200);\n});",
+              "err": {
+                "message": "CypressError: `cy.request()` failed on:\n\nhttp://localhost:3001/api/user/responses\n\nThe response we received from your web server was:\n\n  > 403: Forbidden\n\nThis was considered a failure because the status code was not `2xx` or `3xx`.\n\nIf you do not want status codes to cause failures pass the option: `failOnStatusCode: false`\n\n-----------------------------------------------------------\n\nThe request we sent was:\n\nMethod: POST\nURL: http://localhost:3001/api/user/responses\nHeaders: {\n  \"Connection\": \"keep-alive\",\n  \"Authorization\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTg5MjkyN2FlMDM5MTU5ZTYzMzEyZGIiLCJyb2xlIjoiRU1QTE9ZRUUiLCJpYXQiOjE3NzA1OTY2NDgsImV4cCI6MTc3MDY4MzA0OH0.WzHq9LvVu4q8B1QPq_ObUFfSVdfFh-wzjF9eqBBxj-g\",\n  \"user-agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Cypress/13.17.0 Chrome/118.0.5993.159 Electron/27.3.10 Safari/537.36\",\n  \"accept\": \"*/*\",\n  \"accept-encoding\": \"gzip, deflate\",\n  \"content-type\": \"application/json\",\n  \"content-length\": 239\n}\nBody: {\"responses\":[{\"questionText\":\"What prompted you to start looking for another job?\",\"response\":\"Lack of career growth opportunities\"},{\"questionText\":\"Would you recommend this company to others?\",\"response\":\"Yes, with some reservations\"}]}\n\n-----------------------------------------------------------\n\nThe response we got was:\n\nStatus: 403 - Forbidden\nHeaders: {\n  \"x-powered-by\": \"Express\",\n  \"access-control-allow-origin\": \"*\",\n  \"content-type\": \"application/json; charset=utf-8\",\n  \"content-length\": \"25\",\n  \"etag\": \"W/\\\"19-rixH6y9lu2eFTxVy5wEdlQx/2TE\\\"\",\n  \"date\": \"Mon, 09 Feb 2026 00:24:10 GMT\",\n  \"connection\": \"keep-alive\",\n  \"keep-alive\": \"timeout=5\"\n}\nBody: {\n  \"message\": \"Not allowed\"\n}\n\n\nhttps://on.cypress.io/request",
+                "estack": "CypressError: `cy.request()` failed on:\n\nhttp://localhost:3001/api/user/responses\n\nThe response we received from your web server was:\n\n  > 403: Forbidden\n\nThis was considered a failure because the status code was not `2xx` or `3xx`.\n\nIf you do not want status codes to cause failures pass the option: `failOnStatusCode: false`\n\n-----------------------------------------------------------\n\nThe request we sent was:\n\nMethod: POST\nURL: http://localhost:3001/api/user/responses\nHeaders: {\n  \"Connection\": \"keep-alive\",\n  \"Authorization\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTg5MjkyN2FlMDM5MTU5ZTYzMzEyZGIiLCJyb2xlIjoiRU1QTE9ZRUUiLCJpYXQiOjE3NzA1OTY2NDgsImV4cCI6MTc3MDY4MzA0OH0.WzHq9LvVu4q8B1QPq_ObUFfSVdfFh-wzjF9eqBBxj-g\",\n  \"user-agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Cypress/13.17.0 Chrome/118.0.5993.159 Electron/27.3.10 Safari/537.36\",\n  \"accept\": \"*/*\",\n  \"accept-encoding\": \"gzip, deflate\",\n  \"content-type\": \"application/json\",\n  \"content-length\": 239\n}\nBody: {\"responses\":[{\"questionText\":\"What prompted you to start looking for another job?\",\"response\":\"Lack of career growth opportunities\"},{\"questionText\":\"Would you recommend this company to others?\",\"response\":\"Yes, with some reservations\"}]}\n\n-----------------------------------------------------------\n\nThe response we got was:\n\nStatus: 403 - Forbidden\nHeaders: {\n  \"x-powered-by\": \"Express\",\n  \"access-control-allow-origin\": \"*\",\n  \"content-type\": \"application/json; charset=utf-8\",\n  \"content-length\": \"25\",\n  \"etag\": \"W/\\\"19-rixH6y9lu2eFTxVy5wEdlQx/2TE\\\"\",\n  \"date\": \"Mon, 09 Feb 2026 00:24:10 GMT\",\n  \"connection\": \"keep-alive\",\n  \"keep-alive\": \"timeout=5\"\n}\nBody: {\n  \"message\": \"Not allowed\"\n}\n\n\nhttps://on.cypress.io/request\n    at <unknown> (http://localhost:3001/__cypress/runner/cypress_runner.js:132876:72)\n    at tryCatcher (http://localhost:3001/__cypress/runner/cypress_runner.js:1830:23)\n    at Promise._settlePromiseFromHandler (http://localhost:3001/__cypress/runner/cypress_runner.js:1542:31)\n    at Promise._settlePromise (http://localhost:3001/__cypress/runner/cypress_runner.js:1599:18)\n    at Promise._settlePromise0 (http://localhost:3001/__cypress/runner/cypress_runner.js:1644:10)\n    at Promise._settlePromises (http://localhost:3001/__cypress/runner/cypress_runner.js:1724:18)\n    at _drainQueueStep (http://localhost:3001/__cypress/runner/cypress_runner.js:2430:12)\n    at _drainQueue (http://localhost:3001/__cypress/runner/cypress_runner.js:2423:9)\n    at Async._drainQueues (http://localhost:3001/__cypress/runner/cypress_runner.js:2439:5)\n    at Async.drainQueues (http://localhost:3001/__cypress/runner/cypress_runner.js:2309:14)\nFrom Your Spec Code:\n    at Context.eval (webpack://exitease/./cypress/integration/backend/backendTests.spec.js:96:7)",
+                "diff": null
+              },
+              "uuid": "8b12988b-0f4a-4070-9074-c2c9c9194387",
+              "parentUUID": "5c8cdf1c-5544-401d-bb1a-f6ce4057774c",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "should allow the admin to view all questionnaire responses",
+              "fullTitle": "Backend API Tests for Employee and Admin Role should allow the admin to view all questionnaire responses",
+              "timedOut": null,
+              "duration": 276,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "const token = Cypress.env(\"adminAuthToken\"); // Retrieve admin token from Cypress environment variable\ncy.request({\n  method: \"GET\",\n  url: `${apiUrl}/admin/exit_responses`,\n  headers: {\n    Authorization: `${token}`\n  }\n}).then(response => {\n  expect(response.status).to.eq(200);\n  expect(response.body.data).to.be.an(\"array\");\n  // Find the specific response data that matches the expected responses\n  const expectedResponses = [{\n    questionText: \"What prompted you to start looking for another job?\",\n    response: \"Lack of career growth opportunities\"\n  }, {\n    questionText: \"Would you recommend this company to others?\",\n    response: \"Yes, with some reservations\"\n  }];\n  // Check if any of the data array includes the expected responses\n  const hasExpectedResponses = response.body.data.some(item => {\n    return item.responses.length === expectedResponses.length && item.responses.every((resp, index) => {\n      return resp.questionText === expectedResponses[index].questionText && resp.response === expectedResponses[index].response;\n    });\n  });\n  // Assert that the expected responses exist in the data\n  expect(hasExpectedResponses).to.be.true;\n});",
+              "err": {
+                "message": "CypressError: `cy.request()` failed on:\n\nhttp://localhost:3001/api/admin/exit_responses\n\nThe response we received from your web server was:\n\n  > 401: Unauthorized\n\nThis was considered a failure because the status code was not `2xx` or `3xx`.\n\nIf you do not want status codes to cause failures pass the option: `failOnStatusCode: false`\n\n-----------------------------------------------------------\n\nThe request we sent was:\n\nMethod: GET\nURL: http://localhost:3001/api/admin/exit_responses\nHeaders: {\n  \"Connection\": \"keep-alive\",\n  \"Authorization\": \"undefined\",\n  \"user-agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Cypress/13.17.0 Chrome/118.0.5993.159 Electron/27.3.10 Safari/537.36\",\n  \"accept\": \"*/*\",\n  \"accept-encoding\": \"gzip, deflate\"\n}\n\n-----------------------------------------------------------\n\nThe response we got was:\n\nStatus: 401 - Unauthorized\nHeaders: {\n  \"x-powered-by\": \"Express\",\n  \"access-control-allow-origin\": \"*\",\n  \"content-type\": \"application/json; charset=utf-8\",\n  \"content-length\": \"27\",\n  \"etag\": \"W/\\\"1b-w4O8U+0Ll+sSArmfAX18RvhWpiQ\\\"\",\n  \"date\": \"Mon, 09 Feb 2026 00:24:10 GMT\",\n  \"connection\": \"keep-alive\",\n  \"keep-alive\": \"timeout=5\"\n}\nBody: {\n  \"message\": \"Invalid token\"\n}\n\n\nhttps://on.cypress.io/request",
+                "estack": "CypressError: `cy.request()` failed on:\n\nhttp://localhost:3001/api/admin/exit_responses\n\nThe response we received from your web server was:\n\n  > 401: Unauthorized\n\nThis was considered a failure because the status code was not `2xx` or `3xx`.\n\nIf you do not want status codes to cause failures pass the option: `failOnStatusCode: false`\n\n-----------------------------------------------------------\n\nThe request we sent was:\n\nMethod: GET\nURL: http://localhost:3001/api/admin/exit_responses\nHeaders: {\n  \"Connection\": \"keep-alive\",\n  \"Authorization\": \"undefined\",\n  \"user-agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Cypress/13.17.0 Chrome/118.0.5993.159 Electron/27.3.10 Safari/537.36\",\n  \"accept\": \"*/*\",\n  \"accept-encoding\": \"gzip, deflate\"\n}\n\n-----------------------------------------------------------\n\nThe response we got was:\n\nStatus: 401 - Unauthorized\nHeaders: {\n  \"x-powered-by\": \"Express\",\n  \"access-control-allow-origin\": \"*\",\n  \"content-type\": \"application/json; charset=utf-8\",\n  \"content-length\": \"27\",\n  \"etag\": \"W/\\\"1b-w4O8U+0Ll+sSArmfAX18RvhWpiQ\\\"\",\n  \"date\": \"Mon, 09 Feb 2026 00:24:10 GMT\",\n  \"connection\": \"keep-alive\",\n  \"keep-alive\": \"timeout=5\"\n}\nBody: {\n  \"message\": \"Invalid token\"\n}\n\n\nhttps://on.cypress.io/request\n    at <unknown> (http://localhost:3001/__cypress/runner/cypress_runner.js:132876:72)\n    at tryCatcher (http://localhost:3001/__cypress/runner/cypress_runner.js:1830:23)\n    at Promise._settlePromiseFromHandler (http://localhost:3001/__cypress/runner/cypress_runner.js:1542:31)\n    at Promise._settlePromise (http://localhost:3001/__cypress/runner/cypress_runner.js:1599:18)\n    at Promise._settlePromise0 (http://localhost:3001/__cypress/runner/cypress_runner.js:1644:10)\n    at Promise._settlePromises (http://localhost:3001/__cypress/runner/cypress_runner.js:1724:18)\n    at _drainQueueStep (http://localhost:3001/__cypress/runner/cypress_runner.js:2430:12)\n    at _drainQueue (http://localhost:3001/__cypress/runner/cypress_runner.js:2423:9)\n    at Async._drainQueues (http://localhost:3001/__cypress/runner/cypress_runner.js:2439:5)\n    at Async.drainQueues (http://localhost:3001/__cypress/runner/cypress_runner.js:2309:14)\nFrom Your Spec Code:\n    at Context.eval (webpack://exitease/./cypress/integration/backend/backendTests.spec.js:122:7)",
+                "diff": null
+              },
+              "uuid": "95580da6-0f91-45eb-8d71-eb88eb6d7a58",
+              "parentUUID": "5c8cdf1c-5544-401d-bb1a-f6ce4057774c",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "541502b2-dfa5-47c1-b9c4-4a937e9c32ff",
+            "6012f745-0dbb-46d0-9c50-edaa97ac8874"
+          ],
+          "failures": [
+            "19728da1-e20b-46eb-a169-b18eba0eadb3",
+            "54e101ee-ba4d-4c98-bfb0-3e3f4ebea084",
+            "5beb7b81-d597-4251-81de-0e44c098a0d0",
+            "b41e4686-f592-45b0-8e51-b4afd55b1ba0",
+            "8b12988b-0f4a-4070-9074-c2c9c9194387",
+            "95580da6-0f91-45eb-8d71-eb88eb6d7a58"
+          ],
+          "pending": [],
+          "skipped": [],
+          "duration": 2386,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.0.1"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "my-report",
+        "saveHtml": true,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.4"
+    },
+    "marge": {
+      "options": {
+        "charts": true,
+        "json": true,
+        "reportsDir": "reports/your-reports-folder",
+        "reportFilename": "my-report",
+        "overwrite": false
+      },
+      "version": "6.3.2"
+    }
+  }
+}
